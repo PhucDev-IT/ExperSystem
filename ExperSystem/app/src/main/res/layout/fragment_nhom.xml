@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/_10sdp">
+
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản lý Nhóm"
+        android:textSize="@dimen/_15sdp"
+        android:fontFamily="@font/aeonik_pro_bold"
+        android:gravity="center"/>
+
+    <LinearLayout
+        android:id="@+id/ll_table"
+        android:layout_below="@+id/tv_header"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:text="ID"
+            android:textSize="@dimen/_13sdp"
+            android:fontFamily="@font/aeonik_pro_bold"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên Nhóm"
+            android:textSize="@dimen/_13sdp"
+            android:fontFamily="@font/aeonik_pro_bold"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mô tả"
+            android:textSize="@dimen/_13sdp"
+            android:fontFamily="@font/aeonik_pro_bold"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_above="@id/btnNew"
+        android:layout_below="@+id/ll_table"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rvGroup"/>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnNew"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/btn_corner"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aeonik_pro_bold"
+        android:textColor="@color/white"
+        android:text="Thêm mới"/>
+</RelativeLayout>

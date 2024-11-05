@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context=".activities.RecommendActivity">
+
+    <include layout="@layout/layout_header"  android:id="@+id/ll_header"/>
+
+    <TextView
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gợi ý cho bạn là"
+        android:fontFamily="@font/aeonik_pro_bold"
+        android:textSize="@dimen/_13sdp"/>
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đang tìm kiếm kết quả phù hợp ..."
+        android:minHeight="@dimen/_50sdp"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:fontFamily="@font/aeonik_pro_regular"
+        android:textSize="@dimen/_12sdp"
+        android:background="@drawable/btn_outline"/>
+    <LinearLayout
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Minh họa"
+            android:fontFamily="@font/aeonik_pro_bold"
+            android:textSize="@dimen/_13sdp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

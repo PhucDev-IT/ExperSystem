@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="@dimen/_10sdp"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:padding="@dimen/_10sdp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.core.widget.NestedScrollView>
+        <ExpandableListView
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/ll_bottom"
+            android:id="@+id/expandableListView"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/ll_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:maxHeight="@dimen/_120sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+                app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+                app:boxCornerRadiusTopStart="@dimen/_5sdp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_ket_luan"
+                    android:maxHeight="@dimen/_120sdp"
+                    android:inputType="textMultiLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Kết luận"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_5sdp"
+                app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
+                app:boxCornerRadiusTopStart="@dimen/_5sdp"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_hinh_anh"
+                    android:minHeight="@dimen/_50sdp"
+                    android:inputType="textMultiLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hình ảnh (ngăn cách bằng kí tự |)"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout
+                android:gravity="center"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:textColor="@color/green"
+                    android:background="@drawable/btn_outline"
+                    android:fontFamily="@font/aeonik_pro_bold"
+                    android:text="Thêm"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/btn_outline"
+                    android:fontFamily="@font/aeonik_pro_bold"
+                    android:textColor="@color/warning"
+                    android:text="Sửa"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/btn_outline"
+                    android:fontFamily="@font/aeonik_pro_bold"
+                    android:textColor="@color/color_red"
+                    android:text="Xóa"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
