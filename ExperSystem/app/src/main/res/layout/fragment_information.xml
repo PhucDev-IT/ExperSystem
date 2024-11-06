@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.InformationFragment">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/imgae_avt"
+        android:layout_marginTop="@dimen/_80sdp"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Rounded"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nguyễn Văn Phúc"
+        android:fontFamily="@font/aeonik_pro_bold"
+        android:textSize="@dimen/_15sdp"
+        android:layout_margin="@dimen/_10sdp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phần mềm xây dựng hệ thống hệ chuyên gia tư vấn mua xe oto"
+        android:gravity="center_horizontal"
+        android:fontFamily="@font/aeonik_pro_regular"
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"/>
+
+</LinearLayout>

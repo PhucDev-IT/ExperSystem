@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.ExpandableListView
 import android.widget.TableRow
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -83,6 +84,16 @@ class TapLuatFragment : Fragment() {
         val popupBinding = PopupTapLuatManagerBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(popupBinding.root)
 
+        if(tapLuat==null){
+            popupBinding.btnEdit.isEnabled = false
+            popupBinding.btnDelete.isEnabled = false
+            popupBinding.btnAdd.isEnabled = true
+        }else{
+            popupBinding.btnAdd.isEnabled = false
+            popupBinding.btnEdit.isEnabled = true
+            popupBinding.btnDelete.isEnabled = true
+        }
+
         val groupedEvents = groupEvents.groupBy { it.nhomId }
 
         val childMap:MutableMap<String,List<TapSuKien>> = mutableMapOf()
@@ -96,7 +107,14 @@ class TapLuatFragment : Fragment() {
         val selectedItem = split.flatMap { suKienId ->
             groupEvents.filter { it.suKienId == suKienId }.map { it.description }
         }
-        val adapter = ExpandableListAdapter(requireContext(), childMap.keys.toList(), childMap,selectedItem){}
+
+        var selectedItemFinal = ""
+        val adapter = ExpandableListAdapter(requireContext(), childMap.keys.toList(), childMap,selectedItem){ selected->
+            selectedItemFinal = ""
+            for(item in selected){
+                selectedItemFinal += item.suKienId
+            }
+        }
         popupBinding.expandableListView.setAdapter(adapter)
         popupBinding.expandableListView.setGroupIndicator(null)
 
@@ -110,7 +128,90 @@ class TapLuatFragment : Fragment() {
             }
         }
 
+        popupBinding.btnDelete.setOnClickListener {
+            if (tapLuat != null) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    AppDatabase.APPDATABASE.tapLuatDao().delete(tapLuat)
+                    withContext(Dispatchers.Main){
+                        val existingRow = findTableRowBySuKienId(tapLuat.suKienId)
+                        if (existingRow != null) {
+                            binding.tableLayout.removeView(existingRow)
+                            Toast.makeText(requireContext(),"Xóa thành công",Toast.LENGTH_SHORT).show()
+                        }
+                        dialog.dismiss()
+                    }
+                }
+            }
+        }
+
+        popupBinding.btnAdd.setOnClickListener {
+            addItem(selectedItemFinal,popupBinding)
+        }
+        popupBinding.btnEdit.setOnClickListener {
+            update(tapLuat,selectedItemFinal,popupBinding)
+            dialog.dismiss()
+        }
+
         dialog.show()
 
+    }
+
+    private fun addItem(groupEvent:String, popup:PopupTapLuatManagerBinding){
+        if(popup.edtKetLuan.text.toString().trim().isEmpty()){
+            popup.edtKetLuan.error = "Trường này là bắt buộc"
+        }else if(groupEvent.isEmpty()){
+            Toast.makeText(requireContext(),"Cần chọn sự kiện",Toast.LENGTH_SHORT).show()
+        }else{
+            //val tapSuKien = TapSuKien(suKienId = )
+        }
+    }
+
+    private fun update(tapLuat: TapLuat?,groupEvent:String,popup: PopupTapLuatManagerBinding){
+        if(tapLuat==null) return
+        val oldSuKienId = tapLuat.suKienId
+        if(popup.edtKetLuan.text.toString().trim().isEmpty()){
+            popup.edtKetLuan.error = "Trường này là bắt buộc"
+        }else if(groupEvent.isEmpty()){
+            Toast.makeText(requireContext(),"Cần chọn sự kiện",Toast.LENGTH_SHORT).show()
+        }else{
+            tapLuat.suKienId = groupEvent
+            tapLuat.ketLuan = popup.edtKetLuan.text.toString()
+
+            CoroutineScope(Dispatchers.IO).launch {
+                AppDatabase.APPDATABASE.tapLuatDao().update(tapLuat)
+                withContext(Dispatchers.Main){
+                    val existed = findTableRowBySuKienId(oldSuKienId)
+                    if(existed!=null){
+                        updateTableRow(existed,tapLuat)
+                        Toast.makeText(requireContext(),"Cập nhật thành công",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+    }
+
+    // Helper function to find a TableRow by suKienId
+    private fun findTableRowBySuKienId(suKienId: String): TableRow? {
+        for (i in 0 until binding.tableLayout.childCount) {
+            val row = binding.tableLayout.getChildAt(i) as? TableRow
+            val suKienIdTextView = row?.findViewById<TextView>(R.id.tv_ma_su_kien)
+            if (suKienIdTextView?.text == suKienId) {
+                return row
+            }
+        }
+        return null
+    }
+
+    // Helper function to update an existing TableRow with new data
+    private fun updateTableRow(row: TableRow, tapLuat: TapLuat) {
+        val suKienIdTextView: TextView = row.findViewById(R.id.tv_ma_su_kien)
+        val maLuat: TextView = row.findViewById(R.id.tv_ma_luat)
+        val tvKetLuan: TextView = row.findViewById(R.id.tv_ket_luan)
+
+
+        suKienIdTextView.text = tapLuat.suKienId
+        maLuat.text = tapLuat.maLuat
+        tvKetLuan.text = tapLuat.ketLuan
     }
 }

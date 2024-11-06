@@ -53,7 +53,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("com.intuit.sdp:sdp-android:1.1.1")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.squareup.picasso:picasso:2.8")
 
     val room_version = "2.6.1"
     annotationProcessor("androidx.room:room-compiler:$room_version")

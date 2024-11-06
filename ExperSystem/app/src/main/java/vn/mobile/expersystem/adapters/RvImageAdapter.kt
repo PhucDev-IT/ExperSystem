@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import com.squareup.picasso.Picasso
 import vn.mobile.expersystem.R
 
 class RvImageAdapter(private var list:List<String>):RecyclerView.Adapter<RvImageAdapter.ItemViewHolder>() {
@@ -22,7 +22,7 @@ class RvImageAdapter(private var list:List<String>):RecyclerView.Adapter<RvImage
         holder.itemView.apply {
             val image = holder.itemView.findViewById<ShapeableImageView>(R.id.image)
             Log.d("list",list[position])
-            Glide.with(holder.itemView.context).load(list[position]).into(image)
+            Picasso.get().load(list[position]).into(image)
         }
     }
 

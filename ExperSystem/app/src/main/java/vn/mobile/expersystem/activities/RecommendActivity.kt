@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import vn.mobile.expersystem.R
 import vn.mobile.expersystem.adapters.RvImageAdapter
+import vn.mobile.expersystem.adapters.RvRecommendMoreThanAdapter
 import vn.mobile.expersystem.database.AppDatabase
 import vn.mobile.expersystem.databinding.ActivityRecommendBinding
 
@@ -35,14 +36,14 @@ class RecommendActivity : AppCompatActivity() {
         if(intent.hasExtra("selectedEvent")){
             selectedEvent = intent.getStringExtra("selectedEvent").toString()
             if (selectedEvent.length >= 3 && selectedEvent.endsWith(" ^ ")) {
-                selectedEvent = selectedEvent.dropLast(3)
+                selectedEvent = selectedEvent.dropLast(3).trim()
             }
             searchData()
         }else{
             binding.tvResult.text = "Lỗi hệ thống"
             binding.tvResult.setTextColor(resources.getColor(R.color.color_red))
         }
-
+        recommendMoreThan()
         binding.llHeader.btnBack.setOnClickListener { finish() }
     }
 
@@ -68,6 +69,20 @@ class RecommendActivity : AppCompatActivity() {
             binding.rvImage.adapter = adapter
             binding.rvImage.layoutManager = LinearLayoutManager(this@RecommendActivity, LinearLayoutManager.VERTICAL, false)
 
+        }
+    }
+
+    private fun recommendMoreThan(){
+        val more = selectedEvent.reversed()
+        CoroutineScope(Dispatchers.IO).launch {
+            val result = async { AppDatabase.APPDATABASE.tapLuatDao().selectMoreLike(more,selectedEvent)}.await()
+            withContext(Dispatchers.Main){
+                if(result.isNotEmpty()){
+                    val adapter = RvRecommendMoreThanAdapter(result.map { it.ketLuan }.toMutableList())
+                    binding.rvMoreThan.adapter = adapter
+                    binding.rvMoreThan.layoutManager = LinearLayoutManager(this@RecommendActivity, LinearLayoutManager.VERTICAL, false)
+                }
+            }
         }
     }
 }

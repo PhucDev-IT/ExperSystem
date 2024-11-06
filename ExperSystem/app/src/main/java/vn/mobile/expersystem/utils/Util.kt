@@ -1,5 +1,7 @@
 package vn.mobile.expersystem.utils
 
+import android.content.Context
+
 object Util {
 
     // Hàm extension để lấy tất cả các tổ hợp của một kích thước xác định
@@ -14,5 +16,14 @@ object Util {
         val withElement = remaining.combinations(k - 1).map { it + element }
 
         return withElement.toSet() + withoutElement
+    }
+
+
+    fun clearCache(context: Context) {
+        try {
+            context.cacheDir.deleteRecursively()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

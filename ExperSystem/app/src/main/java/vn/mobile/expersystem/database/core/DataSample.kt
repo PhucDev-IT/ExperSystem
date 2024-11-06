@@ -52,15 +52,8 @@ object DataSample {
                 "- Toyota Wigo: Từ 360 triệu đồng, 5.3L/100km.\n" +
                 "- KIA Morning: Từ 369 triệu đồng, 5.8L/100km.\n" +
                 "- Mitsubishi Attrage: Từ 380 triệu đồng, 5L/100km."),
-        TapLuat(maLuat = "L100",suKienId = "U1 ^ U2",ketLuan = "- Hyundai Grand i10: Từ 360 triệu đồng, 4.6L/100km.\n" +
-                "- Toyota Wigo: Từ 360 triệu đồng, 5.3L/100km.\n" +
-                "- KIA Morning: Từ 369 triệu đồng, 5.8L/100km.\n" +
-                "- Mitsubishi Attrage: Từ 380 triệu đồng, 5L/100km."),
 
         TapLuat(maLuat = "L3", suKienId = "N3 ^ N1", ketLuan = "- Honda City: Từ 529 triệu đồng, phù hợp với đi làm hằng ngày.\n" +
-                "- Toyota Vios: Từ 479 triệu đồng, tiết kiệm nhiên liệu, phù hợp cho việc đi lại hằng ngày."),
-
-        TapLuat(maLuat = "L300", suKienId = "N1 ^ N3", ketLuan = "- Honda City: Từ 529 triệu đồng, phù hợp với đi làm hằng ngày.\n" +
                 "- Toyota Vios: Từ 479 triệu đồng, tiết kiệm nhiên liệu, phù hợp cho việc đi lại hằng ngày."),
 
         TapLuat(maLuat = "L4", suKienId = "N4 ^ N1", ketLuan = "- Ford Transit: Từ 845 triệu đồng, có thể chở nhiều hành lý và người, phù hợp vận tải."),

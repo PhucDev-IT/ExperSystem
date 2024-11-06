@@ -12,7 +12,7 @@ data class TapLuat(
     @ColumnInfo(name = "ma_luat")
     val maLuat: String,
     @ColumnInfo(name = "su_kien_id", index = true)
-    val suKienId: String,
+    var suKienId: String,
     @ColumnInfo(name = "ket_luan")
-    val ketLuan: String
+    var ketLuan: String
 )

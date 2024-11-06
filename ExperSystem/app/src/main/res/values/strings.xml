@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">ExperSystem</string>
-    <string name="nav_home">Bảng điều khiển</string>
+    <string name="nav_home">Tư vấn</string>
     <string name="nav_group">Nhóm</string>
     <string name="nav_event">Sự kiện</string>
     <string name="nav_delete">Xóa dự liệu</string>
     <string name="nav_recommend">Tập luật</string>
+    <string name="nav_info">Thông tin</string>
 
     <string name="label_category">Danh mục</string>
     <string name="label_taste">Khẩu vị hôm nay là gì?</string>

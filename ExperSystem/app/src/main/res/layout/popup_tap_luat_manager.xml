@@ -74,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_add"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:textColor="@color/green"
@@ -82,6 +83,7 @@
                     android:text="Thêm"/>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_edit"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_30sdp"
@@ -91,6 +93,7 @@
                     android:text="Sửa"/>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_delete"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_width="@dimen/_50sdp"
                     android:layout_height="@dimen/_30sdp"
