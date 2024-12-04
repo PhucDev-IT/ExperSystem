@@ -16,6 +16,7 @@
 
         </androidx.core.widget.NestedScrollView>
         <ExpandableListView
+            android:layout_marginBottom="@dimen/_5sdp"
             android:layout_alignParentTop="true"
             android:layout_above="@id/ll_bottom"
             android:id="@+id/expandableListView"
@@ -30,6 +31,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_ma_tap_luat"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:padding="@dimen/_5sdp"
+                android:background="@drawable/btn_outline"
+                android:text="Mã sự kiện ?"
+                android:gravity="center"
+                android:textColor="@color/success"/>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:maxHeight="@dimen/_120sdp"
@@ -59,13 +69,7 @@
                 app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
                 app:boxCornerRadiusTopStart="@dimen/_5sdp"
                 >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_hinh_anh"
-                    android:minHeight="@dimen/_50sdp"
-                    android:inputType="textMultiLine"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Hình ảnh (ngăn cách bằng kí tự |)"/>
+
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout
                 android:gravity="center"

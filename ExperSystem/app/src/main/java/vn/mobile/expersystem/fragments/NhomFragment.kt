@@ -2,6 +2,7 @@ package vn.mobile.expersystem.fragments
 
 import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import vn.mobile.expersystem.R
 import vn.mobile.expersystem.adapters.RvNhomAdapter
+import vn.mobile.expersystem.common.PopupDialog
 import vn.mobile.expersystem.database.AppDatabase
 import vn.mobile.expersystem.database.core.DataSample
 import vn.mobile.expersystem.databinding.FragmentNhomBinding
@@ -151,11 +153,15 @@ class NhomFragment : Fragment() {
     }
 
     private fun getData(){
+        PopupDialog.showLoading(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             val nhomResult = async { AppDatabase.APPDATABASE.nhomDao().getAll() }
             groups = nhomResult.await()
             withContext(Dispatchers.Main){
                 adapter.setData(groups)
+                Handler().postDelayed({
+                    PopupDialog.closeDialog()
+                }, 300)
             }
         }
     }

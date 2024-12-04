@@ -33,6 +33,8 @@ interface TapLuatDao {
     @Query("SELECT * FROM TapLuat")
     fun getAll(): List<TapLuat>
 
+    @Query("SELECT id FROM TapLuat ORDER BY id DESC LIMIT 1")
+    fun getLatestId(): Int
     @Update
     fun update(tapLuat: TapLuat)
 

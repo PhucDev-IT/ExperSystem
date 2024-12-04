@@ -19,7 +19,7 @@ import vn.mobile.expersystem.database.AppDatabase
 import vn.mobile.expersystem.databinding.ActivityRecommendBinding
 
 class RecommendActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityRecommendBinding
+    private lateinit var binding: ActivityRecommendBinding
     private var selectedEvent: String = ""
     private var adapter: RvImageAdapter? = null
 
@@ -33,54 +33,73 @@ class RecommendActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        if(intent.hasExtra("selectedEvent")){
+        if (intent.hasExtra("selectedEvent")) {
             selectedEvent = intent.getStringExtra("selectedEvent").toString()
             if (selectedEvent.length >= 3 && selectedEvent.endsWith(" ^ ")) {
                 selectedEvent = selectedEvent.dropLast(3).trim()
             }
-            searchData()
-        }else{
+            //searchData()
+            recommendMoreThan()
+        } else {
             binding.tvResult.text = "Lỗi hệ thống"
             binding.tvResult.setTextColor(resources.getColor(R.color.color_red))
         }
-        recommendMoreThan()
         binding.llHeader.btnBack.setOnClickListener { finish() }
     }
 
-    private fun searchData(){
+    private fun searchData() {
         CoroutineScope(Dispatchers.IO).launch {
-           val result = async { AppDatabase.APPDATABASE.tapLuatDao().getLuatBySuKienId(selectedEvent.trim())}.await()
-            if(result!=null){
-                showImage(result.id)
-                withContext(Dispatchers.Main){
+            val result = async {
+                AppDatabase.APPDATABASE.tapLuatDao().getLuatBySuKienId(selectedEvent.trim())
+            }.await()
+            if (result != null) {
+              //  showImage(result.id)
+                withContext(Dispatchers.Main) {
                     binding.tvResult.text = result.ketLuan.toString()
                 }
-            }else{
+            } else {
                 binding.tvResult.text = "Không tìm thấy dữ liệu phù hợp!"
             }
         }
     }
 
-    private suspend fun showImage(tapLuatId: Int){
-        val images = AppDatabase.APPDATABASE.imageDao().getAllImagesForTapLuat(tapLuatId)
-        Log.d("Images", images.toString())
-        withContext(Dispatchers.Main){
-            adapter = RvImageAdapter(images.map { it.hinhAnhXe })
-            binding.rvImage.adapter = adapter
-            binding.rvImage.layoutManager = LinearLayoutManager(this@RecommendActivity, LinearLayoutManager.VERTICAL, false)
+//    private suspend fun showImage(tapLuatId: Int) {
+//        val images = AppDatabase.APPDATABASE.imageDao().getAllImagesForTapLuat(tapLuatId)
+//        Log.d("Images", images.toString())
+//        withContext(Dispatchers.Main) {
+//            adapter = RvImageAdapter(images.map { it.hinhAnhXe })
+//            binding.rvImage.adapter = adapter
+//            binding.rvImage.layoutManager =
+//                LinearLayoutManager(this@RecommendActivity, LinearLayoutManager.VERTICAL, false)
+//
+//        }
+//    }
 
-        }
-    }
-
-    private fun recommendMoreThan(){
+    private fun recommendMoreThan() {
         val more = selectedEvent.reversed()
         CoroutineScope(Dispatchers.IO).launch {
-            val result = async { AppDatabase.APPDATABASE.tapLuatDao().selectMoreLike(more,selectedEvent)}.await()
-            withContext(Dispatchers.Main){
-                if(result.isNotEmpty()){
-                    val adapter = RvRecommendMoreThanAdapter(result.map { it.ketLuan }.toMutableList())
+            val result = async {
+                AppDatabase.APPDATABASE.tapLuatDao().selectMoreLike(more, selectedEvent)
+            }.await().toMutableList()
+            withContext(Dispatchers.Main) {
+                if (result.isNotEmpty()) {
+                    val needTapLuat = result.find { it.suKienId == selectedEvent }
+                    if (needTapLuat != null) {
+                        binding.tvResult.text = needTapLuat.ketLuan.toString()
+                    } else {
+                        binding.tvResult.text = "Không tìm thấy dữ liệu phù hợp!"
+                    }
+                        result.remove(needTapLuat)
+                    val adapter =
+                        RvRecommendMoreThanAdapter(result.map { it.ketLuan }.toMutableList())
                     binding.rvMoreThan.adapter = adapter
-                    binding.rvMoreThan.layoutManager = LinearLayoutManager(this@RecommendActivity, LinearLayoutManager.VERTICAL, false)
+                    binding.rvMoreThan.layoutManager = LinearLayoutManager(
+                        this@RecommendActivity,
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
+                }else{
+                    binding.tvResult.text = "Không tìm thấy dữ liệu phù hợp!"
                 }
             }
         }

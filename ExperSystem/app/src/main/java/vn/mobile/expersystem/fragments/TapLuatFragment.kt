@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import vn.mobile.expersystem.R
 import vn.mobile.expersystem.adapters.ExpandableListAdapter
+import vn.mobile.expersystem.common.PopupDialog
 import vn.mobile.expersystem.database.AppDatabase
+import vn.mobile.expersystem.database.AppDatabase.Companion.APPDATABASE
 import vn.mobile.expersystem.database.core.DataSample
 import vn.mobile.expersystem.database.core.DataSample.groupEvents
 import vn.mobile.expersystem.databinding.FragmentTapLuatBinding
@@ -26,6 +28,8 @@ import vn.mobile.expersystem.databinding.PopupAddNhomBinding
 import vn.mobile.expersystem.databinding.PopupTapLuatManagerBinding
 import vn.mobile.expersystem.models.TapLuat
 import vn.mobile.expersystem.models.TapSuKien
+import java.util.UUID
+import kotlin.random.Random
 
 class TapLuatFragment : Fragment() {
     private lateinit var _binding: FragmentTapLuatBinding
@@ -42,35 +46,42 @@ class TapLuatFragment : Fragment() {
     }
 
     private fun initView() {
+        PopupDialog.showLoading(requireContext())
         handleEvent()
        CoroutineScope(Dispatchers.IO).launch {
            val tapLuat = AppDatabase.APPDATABASE.tapLuatDao().getAll()
            withContext(Dispatchers.Main){
                displayData(tapLuat)
+               Handler(requireContext().mainLooper).postDelayed({
+                   PopupDialog.closeDialog()
+               },500)
            }
        }
     }
 
     private fun displayData(tapLuat: List<TapLuat>) {
         for (item in tapLuat) {
-            val tableRow = layoutInflater.inflate(R.layout.item_tap_luat, null) as TableRow
-            val tvMaLuat: TextView = tableRow.findViewById(R.id.tv_ma_luat)
-            val tvMaSuKien: TextView = tableRow.findViewById(R.id.tv_ma_su_kien)
-            val tvKetLuan: TextView = tableRow.findViewById(R.id.tv_ket_luan)
-            val tvHinhAnh: TextView = tableRow.findViewById(R.id.tv_hinh_anh)
-
-            // Điền dữ liệu vào các TextView
-            tvMaLuat.text = item.maLuat
-            tvMaSuKien.text = item.suKienId
-            tvKetLuan.text = item.ketLuan
-
-            tableRow.setOnClickListener {
-                showPopup(item)
-
-            }
             // Thêm TableRow vào TableLayout
-            binding.tableLayout.addView(tableRow)
+            binding.tableLayout.addView(initTableRow(item))
         }
+    }
+
+    private fun initTableRow(item:TapLuat): TableRow {
+        val tableRow = layoutInflater.inflate(R.layout.item_tap_luat, null) as TableRow
+        val tvMaLuat: TextView = tableRow.findViewById(R.id.tv_ma_luat)
+        val tvMaSuKien: TextView = tableRow.findViewById(R.id.tv_ma_su_kien)
+        val tvKetLuan: TextView = tableRow.findViewById(R.id.tv_ket_luan)
+
+        // Điền dữ liệu vào các TextView
+        tvMaLuat.text = item.maLuat
+        tvMaSuKien.text = item.suKienId
+        tvKetLuan.text = item.ketLuan
+
+        tableRow.setOnClickListener {
+            showPopup(item)
+
+        }
+        return tableRow
     }
 
     private fun handleEvent() {
@@ -112,21 +123,15 @@ class TapLuatFragment : Fragment() {
         val adapter = ExpandableListAdapter(requireContext(), childMap.keys.toList(), childMap,selectedItem){ selected->
             selectedItemFinal = ""
             for(item in selected){
-                selectedItemFinal += item.suKienId
+                selectedItemFinal += "${item.suKienId} ^ "
             }
+
+            popupBinding.tvMaTapLuat.text = if(selectedItemFinal.isNotEmpty()) selectedItemFinal.dropLast(3) else "Mã sự kiện ?"
         }
         popupBinding.expandableListView.setAdapter(adapter)
         popupBinding.expandableListView.setGroupIndicator(null)
 
         popupBinding.edtKetLuan.setText(tapLuat?.ketLuan)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val list = AppDatabase.APPDATABASE.imageDao().getAllImagesForTapLuat(tapLuat?.id ?: 0)
-            val imageUrls = list.map { it.hinhAnhXe }
-            withContext(Dispatchers.Main) {
-                //  popupBinding.edtHinhAnh.setAdapter(adapter)
-            }
-        }
 
         popupBinding.btnDelete.setOnClickListener {
             if (tapLuat != null) {
@@ -145,7 +150,9 @@ class TapLuatFragment : Fragment() {
         }
 
         popupBinding.btnAdd.setOnClickListener {
-            addItem(selectedItemFinal,popupBinding)
+            addItem(selectedItemFinal,popupBinding){
+                dialog.dismiss()
+            }
         }
         popupBinding.btnEdit.setOnClickListener {
             update(tapLuat,selectedItemFinal,popupBinding)
@@ -156,15 +163,27 @@ class TapLuatFragment : Fragment() {
 
     }
 
-    private fun addItem(groupEvent:String, popup:PopupTapLuatManagerBinding){
+    private fun addItem(groupEvent:String, popup:PopupTapLuatManagerBinding, callback:()->Unit){
         if(popup.edtKetLuan.text.toString().trim().isEmpty()){
             popup.edtKetLuan.error = "Trường này là bắt buộc"
         }else if(groupEvent.isEmpty()){
             Toast.makeText(requireContext(),"Cần chọn sự kiện",Toast.LENGTH_SHORT).show()
         }else{
-            //val tapSuKien = TapSuKien(suKienId = )
+            PopupDialog.showLoading(requireContext())
+            CoroutineScope(Dispatchers.IO).launch {
+                val latestId = APPDATABASE.tapLuatDao().getLatestId()
+                val tapLuat = TapLuat(maLuat = "L${latestId+10}",suKienId = groupEvent,ketLuan = popup.edtKetLuan.text.toString())
+                APPDATABASE.tapLuatDao().insertTapLuat(tapLuat)
+                withContext(Dispatchers.Main){
+                    binding.tableLayout.addView(initTableRow(tapLuat))
+                    PopupDialog.closeDialog()
+                    Toast.makeText(requireContext(),"Thêm thành công",Toast.LENGTH_SHORT).show()
+                    callback()
+                }
+            }
         }
     }
+
 
     private fun update(tapLuat: TapLuat?,groupEvent:String,popup: PopupTapLuatManagerBinding){
         if(tapLuat==null) return
